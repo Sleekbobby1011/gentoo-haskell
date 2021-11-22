@@ -14,7 +14,9 @@ inherit haskell-cabal
 
 DESCRIPTION="Haskell 98 phantom types to avoid unsafely passing dummy arguments"
 HOMEPAGE="https://github.com/ekmett/tagged"
-SRC_URI="https://hackage.haskell.org/package/${P}/${P}.tar.gz"
+SRC_URI="
+	https://hackage.haskell.org/package/${P}/${P}.tar.gz
+	https://hackage.haskell.org/package/${P}/revision/2.cabal -> ${PF}.cabal"
 
 LICENSE="BSD"
 SLOT="0/${PV}"
@@ -25,6 +27,13 @@ RDEPEND=">=dev-haskell/transformers-compat-0.5:=[profile?] <dev-haskell/transfor
 	>=dev-lang/ghc-7.8.2:=
 "
 DEPEND="${RDEPEND}"
+
+src_prepare() {
+	default
+
+	# pull newer cabal file from hackage revision.
+	cp "${DISTDIR}/${PF}.cabal" "${S}/${PN}.cabal" || die
+}
 
 src_configure() {
 	haskell-cabal_src_configure \
